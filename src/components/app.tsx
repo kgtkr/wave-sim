@@ -21,10 +21,10 @@ interface AppState {
 }
 
 export class App extends React.Component<AppProps, AppState> {
-  fps = 10;
+  fps = 30;
   subs: Subscription[] = [];
   mouseY = 0;
-  rodInterval = 0.1;
+  rodInterval = 0.05;
   rodR = 0.02;
 
   get updateS() {
@@ -36,7 +36,7 @@ export class App extends React.Component<AppProps, AppState> {
     this.state = {
       machine: {
         w: 10,
-        end: "none",
+        end: "fixed",
         r: 0,
         v: 1,
       },
@@ -84,8 +84,11 @@ export class App extends React.Component<AppProps, AppState> {
               x)}
             r={this.rodR} />;
         })}
-      <g stroke="green" >
+      <g stroke="red" >
         <line x1={0} y1={-this.mouseY} x2={this.state.machine.w} y2={-this.mouseY} strokeWidth={0.01} />
+      </g>
+      <g stroke="green" >
+        <line x1={0} y1={0} x2={this.state.machine.w} y2={0} strokeWidth={0.01} />
       </g>
     </svg>;
   }
