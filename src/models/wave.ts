@@ -31,44 +31,48 @@ export interface Machine {
   v: number;
 }
 
-export interface Wave {
-  y(t: number): number;
+export abstract class Wave {
+  protected abstract getY(t: number): number;
+  y(t: number) {
+    if (t < 0) {
+      return 0;
+    } else {
+      return this.getY(t);
+    }
+  }
 }
 
-export class EmptyWave implements Wave {
-  y() {
+export class EmptyWave extends Wave {
+  getY() {
     return 0;
   }
 }
 
-export class SupWave implements Wave {
+export class SupWave extends Wave {
   constructor(public waves: Im.Set<Wave>) {
-
+    super();
   }
 
-  y(t: number) {
+  getY(t: number) {
     return this.waves
       .map(w => w.y(t))
       .reduce((a, b) => a + b, 0);
   }
 }
 
-export class CosWave implements Wave {
-  constructor() {
-
-  }
-
-  y(t: number) {
+export class CosWave extends Wave {
+  getY(t: number) {
     return Math.cos(t);
   }
 }
 
-export class ManualWave implements Wave {
+export class ManualWave extends Wave {
   constructor(public interval: number,
     public list = Im.List<number>()) {
+    super();
   }
 
-  y(t: number) {
+  getY(t: number) {
     return this.list.get(t / this.interval) || 0;
   }
 
