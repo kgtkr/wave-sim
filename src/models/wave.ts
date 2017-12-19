@@ -53,6 +53,16 @@ export class SupWave implements Wave {
   }
 }
 
+export class CosWave implements Wave {
+  constructor() {
+
+  }
+
+  y(t: number) {
+    return Math.cos(t);
+  }
+}
+
 export class ManualWave implements Wave {
   constructor(public interval: number,
     public list = Im.List<number>()) {
