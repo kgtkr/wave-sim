@@ -9,6 +9,7 @@ import {
   Observable
 } from "rxjs";
 import * as utils from "../utils";
+import { Slider } from "material-ui";
 
 interface AppProps {
 
@@ -18,12 +19,12 @@ interface AppState {
   machine: Machine,
   wave: ManualWave;
   t: number;
+  mouseY: number;
 }
 
 export class App extends React.Component<AppProps, AppState> {
   fps = 30;
   subs: Subscription[] = [];
-  mouseY = 0;
   rodInterval = 0.05;
   rodR = 0.02;
 
@@ -38,17 +39,18 @@ export class App extends React.Component<AppProps, AppState> {
         w: 10,
         end: "fixed",
         r: 0,
-        v: 1,
+        v: 1
       },
       t: 0,
-      wave: new ManualWave(this.updateS)
+      wave: new ManualWave(this.updateS),
+      mouseY: 0
     };
 
     this.subs.push(Observable
       .interval(this.updateS * 1000)
       .subscribe(() => this.setState({
         t: this.state.t + this.updateS,
-        wave: this.state.wave.add(this.mouseY)
+        wave: this.state.wave.add(this.state.mouseY)
       })));
 
     this.subs.push(Observable
@@ -66,30 +68,45 @@ export class App extends React.Component<AppProps, AppState> {
     const height = 500;
     const vbh = 10;
 
-    return <svg onMouseMove={e => {
-      const y = e.clientY - (e.target as SVGSVGElement).getBoundingClientRect().top;
-      this.mouseY = -(y / height * vbh - vbh / 2);
-    }} width={width}
-      height={height}
-      viewBox={`0 ${-vbh / 2} ${this.state.machine.w} ${vbh}`}>
-      {utils.range(0, Math.floor(this.state.machine.w / this.rodInterval))
-        .map((_, i) => {
-          const x = i * this.rodInterval;
-          return <circle
-            key={i}
-            cx={x}
-            cy={-waveY(this.state.machine,
-              this.state.wave,
-              this.state.t,
-              x)}
-            r={this.rodR} />;
-        })}
-      <g stroke="red" >
-        <line x1={0} y1={-this.mouseY} x2={this.state.machine.w} y2={-this.mouseY} strokeWidth={0.01} />
-      </g>
-      <g stroke="green" >
-        <line x1={0} y1={0} x2={this.state.machine.w} y2={0} strokeWidth={0.01} />
-      </g>
-    </svg>;
+    return <div style={{
+      display: "flex"
+    }}>
+      <Slider
+        axis="y"
+        value={this.state.mouseY}
+        onChange={(_e, v) => this.setState({ mouseY: v })}
+        min={-vbh / 2}
+        max={vbh / 2}
+        step={vbh / 100}
+        style={{ height }}
+        sliderStyle={{ margin: 0 }} />
+      <svg width={width}
+        height={height}
+        viewBox={`0 ${-vbh / 2} ${this.state.machine.w} ${vbh}`}>
+        {utils.range(0, Math.floor(this.state.machine.w / this.rodInterval))
+          .map((_, i) => {
+            const x = i * this.rodInterval;
+            return <circle
+              key={i}
+              cx={x}
+              cy={-waveY(this.state.machine,
+                this.state.wave,
+                this.state.t,
+                x)}
+              r={this.rodR} />;
+          })}
+        <g stroke="red" >
+          <line
+            x1={0}
+            y1={-this.state.mouseY}
+            x2={this.state.machine.w}
+            y2={-this.state.mouseY}
+            strokeWidth={0.01} />
+        </g>
+        <g stroke="green" >
+          <line x1={0} y1={0} x2={this.state.machine.w} y2={0} strokeWidth={0.01} />
+        </g>
+      </svg>
+    </div>;
   }
 }
