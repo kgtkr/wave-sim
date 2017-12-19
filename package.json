@@ -1,0 +1,44 @@
+{
+  "name": "wave-sim",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack-dev-server",
+    "build": "webpack -p&&cp  -pR ./public/* ./dist",
+    "lint": "tslint -p tsconfig.json -c tslint.json 'src/**/*.ts{,x}'",
+    "lint:fix": "tslint -p tsconfig.json -c tslint.json 'src/**/*.ts{,x}' --fix",
+    "loc": "sloc --format cli-table ./src",
+    "deploy": "gh-pages -d dist"
+  },
+  "author": "kgtkr",
+  "license": "AGPL-3.0",
+  "devDependencies": {
+    "@types/classnames": "^2.2.3",
+    "@types/material-ui": "^0.18.5",
+    "@types/react": "^16.0.28",
+    "@types/react-dom": "^16.0.3",
+    "awesome-typescript-loader": "^3.4.1",
+    "css-loader": "^0.28.7",
+    "gh-pages": "^1.1.0",
+    "node-sass": "^4.7.2",
+    "sass-loader": "^6.0.6",
+    "sloc": "^0.2.0",
+    "source-map-loader": "^0.2.3",
+    "style-loader": "^0.19.0",
+    "tslint": "^5.8.0",
+    "typescript": "^2.6.2",
+    "webpack": "^3.10.0",
+    "webpack-dev-server": "^2.9.7"
+  },
+  "dependencies": {
+    "classnames": "^2.2.5",
+    "core-js": "^2.5.2",
+    "immutable": "^4.0.0-rc.9",
+    "material-ui": "^0.19.4",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "rxjs": "^5.5.5",
+    "typelevel-ts": "^0.2.2"
+  }
+}
