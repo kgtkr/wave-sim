@@ -32,6 +32,7 @@
     "webpack-dev-server": "^2.9.7"
   },
   "dependencies": {
+    "@yr/catmull-rom-spline": "^1.0.3",
     "classnames": "^2.2.5",
     "core-js": "^2.5.2",
     "immutable": "^4.0.0-rc.9",
