@@ -1,8 +1,8 @@
 import * as Im from "immutable";
 
-export function waveY(machine: Machine, wave: Wave, t: number, x: number) {
+export function waveY(machine: Machine, wave: Wave, t: number, x: number): [number, number, number] {
   if (x < 0) {
-    return 0;
+    return [0, 0, 0];
   } else if (x <= machine.w) {
     // 普通の波のY座標
     const y1 = wave.y(t - x / machine.v);
@@ -14,9 +14,9 @@ export function waveY(machine: Machine, wave: Wave, t: number, x: number) {
         return machine.end === "free" ? y : -y;
       })();
     // TODO:抵抗
-    return y1 + y2;
+    return [y1 + y2, y1, y2]
   } else {
-    return 0;
+    return [0, 0, 0];
   }
 }
 

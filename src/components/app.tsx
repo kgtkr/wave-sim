@@ -64,6 +64,26 @@ export class App extends React.Component<AppProps, AppState> {
     this.subs.forEach(s => s.unsubscribe());
   }
 
+  pahtD(): [string, string, string] {
+    const [p, p1, p2] = utils.range(0, Math.floor(this.state.machine.w / this.rodInterval))
+      .reduce<[[number, number][], [number, number][], [number, number][]]>((r, i) => {
+        const x = i * this.rodInterval;
+        const [y, y1, y2] = waveY(this.state.machine,
+          this.state.wave,
+          this.state.t,
+          x);
+        r[0].push([x, -y]);
+        r[1].push([x, -y1]);
+        r[2].push([x, -y2]);
+        return r;
+      }, [[], [], []]);
+    return [
+      spline.svgPath(spline.points(p)),
+      spline.svgPath(spline.points(p1)),
+      spline.svgPath(spline.points(p2)),
+    ];
+  }
+
   render() {
     const width = 500;
     const height = 500;
@@ -85,18 +105,26 @@ export class App extends React.Component<AppProps, AppState> {
         height={height}
         viewBox={`0 ${-vbh / 2} ${this.state.machine.w} ${vbh}`}>
         {//波形
-          <path
-            fill="transparent"
-            stroke="black"
-            strokeWidth={0.03}
-            d={spline.svgPath(spline.points(utils.range(0, Math.floor(this.state.machine.w / this.rodInterval))
-              .map(i => {
-                const x = i * this.rodInterval;
-                return [x, -waveY(this.state.machine,
-                  this.state.wave,
-                  this.state.t,
-                  x)];
-              })))} />
+          (() => {
+            const [d, d1, d2] = this.pahtD();
+            return <g>
+              <path
+                fill="transparent"
+                stroke="red"
+                strokeWidth={0.02}
+                d={d1} />
+              <path
+                fill="transparent"
+                stroke="blue"
+                strokeWidth={0.02}
+                d={d2} />
+              <path
+                fill="transparent"
+                stroke="black"
+                strokeWidth={0.03}
+                d={d} />
+            </g>;
+          })()
         }
         <g stroke="blue" >
           {
