@@ -28,7 +28,7 @@ interface AppState {
 }
 
 export class App extends React.Component<AppProps, AppState> {
-  fps = 15;
+  fps = 10;
   subs: Subscription[] = [];
   rodInterval = 0.05;
   rodR = 0.02;
