@@ -108,6 +108,9 @@ export class App extends React.Component<AppProps, AppState> {
     return <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
       <div>
         <Card style={{ padding: "1rem" }}>
+          <a target="_blank" href="https://github.com/kgtkr/wave-sim">ソースコード</a>
+        </Card>
+        <Card style={{ padding: "1rem" }}>
           <div style={{
             display: "flex"
           }}>
