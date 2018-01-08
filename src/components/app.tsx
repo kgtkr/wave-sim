@@ -11,8 +11,6 @@ import {
 import * as utils from "../utils";
 import {
   Slider,
-  SelectField,
-  MenuItem,
   Card,
   CardHeader,
   Table,
@@ -28,6 +26,7 @@ import {
   darkBaseTheme,
   MuiThemeProvider,
 } from "material-ui/styles";
+import { Config } from "./config";
 
 interface AppProps {
 
@@ -210,21 +209,20 @@ export class App extends React.Component<AppProps, AppState> {
         </Card>
         <Card style={{ padding: "1rem" }}>
           <CardHeader title="設定" />
-          <SelectField
-            floatingLabelText="端"
-            value={this.state.machine.end}
-            onChange={(_e, _i, v) => this.setState({
-              ...this.state,
-              machine: {
-                ...this.state.machine,
-                end: v
-              }
-            })}
-          >
-            <MenuItem value="fixed" primaryText="固定端" />
-            <MenuItem value="free" primaryText="自由端" />
-            <MenuItem value="none" primaryText="反射しない" />
-          </SelectField>
+          <Config
+            default={{ end: this.state.machine.end, v: this.state.machine.v }}
+            onSubmit={v => {
+              this.setState({
+                ...this.state,
+                wave: new ManualWave(this.updateS),
+                t: 0,
+                machine: {
+                  ...this.state.machine,
+                  end: v.end,
+                  v: v.v
+                }
+              });
+            }} />
         </Card>
       </div>
     </MuiThemeProvider>;
